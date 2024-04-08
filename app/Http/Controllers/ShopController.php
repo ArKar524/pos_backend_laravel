@@ -21,7 +21,10 @@ class ShopController extends Controller
     public function index()
     {
         $shops = ShopResource::collection(Shop::get());
-        return $shops;
+        return response()->json([
+            'data' => $shops,
+            'status' => true
+        ], 200);
     }
 
     /**
