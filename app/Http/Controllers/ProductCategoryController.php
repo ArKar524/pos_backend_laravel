@@ -25,9 +25,19 @@ class ProductCategoryController extends Controller
         return ProductCategoryResource::collection($productCategories);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+     /**
+
+ * @OA\Post(
+ *     path="/api/v1/product-categories",
+ *     summary="Post all product-categories",
+ *     operationId="postProductCategory",
+ *     tags={"ProductCategory"},
+ *      @OA\Parameter( name="ProductCategoryCode", in="query", description="ProductCategory Name",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="ProductCategoryName", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function store(StoreProductCategoryRequest $request)
     {
 
@@ -41,9 +51,22 @@ class ProductCategoryController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+     /**
+ * @OA\Get(
+ *     path="/api/v1/product-categories/{id}",
+ *     summary="Show product-categories",
+ *     operationId="showProductCategories",
+ *     tags={"ProductCategory"},
+ *     @OA\Parameter( name="id", in="path", description="ID of the productCategory member", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+ *    security={{"bearerAuth":{}}}
+ * )
+ */
     public function show(string $id)
     {
         $productCategory = $this->productCategory->getDataById($id);
@@ -61,9 +84,26 @@ class ProductCategoryController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+       /**
+
+ * @OA\Put(
+ *     path="/api/v1/product-categories/{id}",
+ *     summary="update all product-categories",
+ *     operationId="updateProductCategory",
+ *     tags={"ProductCategory"},
+ *     @OA\Parameter( name="ProductCategoryId", in="path", description="Enter Id you want to update", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Parameter( name="ProductCategoryCode", in="query", description="ProductCategory Name",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="ProductCategoryName", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function update(Request $request, string $id)
     {
         $productCategory = $this->productCategory->update($request->all(), $id);
@@ -81,9 +121,24 @@ class ProductCategoryController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+        /**
+
+    * @OA\Delete(
+    *     path="/api/v1/product-categories/{id}",
+    *     summary="delete product-categories",
+    *     operationId="deleteProductCategory",
+    *     tags={"ProductCategory"},
+    *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+    *       @OA\Schema(
+    *             type="integer",
+    *             format="int64"
+    *         )
+    *     ),
+    *      @OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+
+    *     security={{"bearerAuth":{}}}
+    * )
+    */   
     public function destroy(string $id)
     {
         $productCategory = $this->productCategory->destroy($id);

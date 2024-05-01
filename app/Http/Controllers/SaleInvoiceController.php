@@ -24,6 +24,17 @@ class SaleInvoiceController extends Controller
        
     }
 
+        /**
+    * @OA\Get( 
+    *   path="/api/v1/sale-invoices",
+    *    summary="Get Sale invoices",
+    *   operationId="getSaleInvoices",
+    *     tags={"SaleInvoice"},
+    *   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
+    * security={{"bearerAuth":{}}}
+    * )
+    */
+
     public function index()
     {
         $saleInvoices = SaleInvoice::with("staff","customer")->get();
@@ -35,9 +46,27 @@ class SaleInvoiceController extends Controller
     }
 
    
-    /**
-     * Store a newly created resource in storage.
-     */
+     /**
+
+ * @OA\Post(
+ *     path="/api/v1/sale-invoices",
+ *     summary="Post all sale-invoices",
+ *     operationId="postSaleInvoice",
+ *     tags={"SaleInvoice"},
+ *      @OA\Parameter( name="total_amount", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="discount", in="query", description="address",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="tax", in="query", description="gender",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="payment_type", in="query", description="position",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="payment_amount", in="query", description="shop id",required=true, @OA\Schema(type="number")),
+ *      @OA\Parameter( name="receive_amount", in="query", description="shop id",required=true, @OA\Schema(type="number")),
+ *      @OA\Parameter( name="change", in="query", description="shop id",required=false, @OA\Schema(type="number")),
+ *      @OA\Parameter( name="staff_id", in="query", description="shop id",required=true, @OA\Schema(type="number")),
+ *      @OA\Parameter( name="customer_id", in="query", description="shop id",required=true, @OA\Schema(type="number")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function store(StoreSaleInvoiceRequest $request)
     {
        
@@ -87,9 +116,22 @@ class SaleInvoiceController extends Controller
  
     }
 
-    /**
-     * Display the specified resource.
-     */
+            /**
+     * @OA\Get(
+     *     path="/api/v1/sale-invoices/{id}",
+     *     summary="Show sale-invoices",
+     *     operationId="showSaleInvoice",
+     *     tags={"SaleInvoice"},
+     *     @OA\Parameter( name="id", in="path", description="ID of the Sale Invoice", required=true,
+     *       @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+    *    security={{"bearerAuth":{}}}
+    * )
+    */
     public function show($id)
     {
         $saleInvoice = $this->invoice->getDataById($id);
@@ -105,6 +147,22 @@ class SaleInvoiceController extends Controller
         }
     }
 
+             /**
+     * @OA\Get(
+     *     path="/api/v1/sale-invoices/get-by-voucher/{voucher_no}",
+     *     summary="search by voucher no",
+     *     operationId="showSaleInvoiceByVoucher_no",
+     *     tags={"SaleInvoice"},
+     *     @OA\Parameter( name="voucher_no", in="path", description="voucher no", required=true,
+     *       @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+    *    security={{"bearerAuth":{}}}
+    * )
+    */
   
     public function getDataByVoucherNo($voucher_no)
     {
@@ -120,9 +178,24 @@ class SaleInvoiceController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   /**
+
+ * @OA\Delete(
+ *     path="/api/v1/sale-invoices/{id}",
+ *     summary="delete sale-invoices",
+ *     operationId="deleteSaleInvoice",
+ *     tags={"SaleInvoice"},
+  *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+
+ *     security={{"bearerAuth":{}}}
+ * )
+ */   
     public function destroy($id)
     {
         $saleInvoice = $this->invoice->destroy($id);
