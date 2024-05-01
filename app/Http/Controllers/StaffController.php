@@ -18,7 +18,13 @@ class StaffController extends Controller
     {
         $this->staff = $staff;
     }
-
+    /**
+     * @OA\PathItem(
+     *  title= "My first API",
+     *  version = "0.1"
+     * )
+     *
+     * **/
     public function index()
     {
         $staff = Staff::get();
@@ -27,17 +33,17 @@ class StaffController extends Controller
             "data"=> StaffResource::collection($staff),
             "status" => true
         ], 200);
-    
+
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreStaffRequest $request)
     {
-       
+
        $validatedData = $request->validated();
 
        $staffCode =  "Stf_" . mt_rand(3000, 999999);
@@ -93,7 +99,7 @@ class StaffController extends Controller
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
-            ], 404);    
+            ], 404);
        }
     }
 
@@ -115,6 +121,6 @@ class StaffController extends Controller
                 'status' => false
             ], 404);
        }
-    
+
     }
 }

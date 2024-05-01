@@ -16,6 +16,13 @@ class ShopController extends Controller
         $this->shop = $shop;
     }
     /**
+     * @OA\PathItem(
+     *  title= "My first API",
+     *  version = "0.1"
+     * )
+     *
+     * **/
+    /**
      * Display a listing of the resource.
      */
     public function index()

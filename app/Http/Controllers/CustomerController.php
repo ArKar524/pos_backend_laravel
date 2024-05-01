@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductCategoryRequest;
-use App\Http\Resources\ProductCategoryResource;
-use App\Models\ProductCategory;
-use App\Services\ProductCategoryService;
 use Illuminate\Http\Request;
+use App\Http\Resources\CustomerResource;
+use App\Models\Customer;
 
-class ProductCategoryController extends Controller
+
+class CustomerController extends Controller
 {
-    protected $productCategory;
+    protected $customer;
 
-
-    public function __construct(ProductCategoryService $productCategory)
+    function __construct(CustomerService $customer)
     {
-        $this->productCategory = $productCategory;
+        $this->customer = $customer;
     }
-
     /**
      * @OA\PathItem(
      *  title= "My first API",
@@ -25,26 +22,39 @@ class ProductCategoryController extends Controller
      * )
      *
      * **/
+
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $product = Product::with('ProductCategory')->get();
+        $customer = CustomerResource::collection(Customer::get());
+        return $customer;
+    }
 
-        $productList = ProductResource::collection($product);
-
-        return $this->success($productList, 'success', 200);
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductCategoryRequest $request)
+    public function store(Request $request)
     {
+        // return $request->all();
+        $data = $request->validated();
 
-        $productCategory = $this->productCategory->insert($request->all());
+        $customer = $this->customer->insert($data);
 
-        if ($productCategory) {
+        if ($customer) {
             return response()->json([
-                'data' => $productCategory,
+                'data' => CustomerResource::make($customer),
+                'message'=>"A customer account is created successfully ",
                 'status' => true
             ], 200);
         }
@@ -55,19 +65,27 @@ class ProductCategoryController extends Controller
      */
     public function show(string $id)
     {
-        $productCategory = $this->productCategory->getDataById($id);
+        $customer = $this->customer->getDataById($id);
 
-        if ($productCategory) {
+        if ($customer) {
             return response()->json([
-                'data' => $productCategory,
+                'data' => CustomerResource::make($customer),
                 'status' => true
             ], 200);
-        } else {
+        }else{
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
             ], 404);
         }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
     }
 
     /**
@@ -75,19 +93,19 @@ class ProductCategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $productCategory = $this->productCategory->update($request->all(), $id);
+        $customer =  $this->customer->update($request->validated(), $id);
 
-        if ($productCategory) {
+        if($customer) {
             return response()->json([
                 'message' => 'Successfully updated data',
                 'status' => true
             ], 200);
-        } else {
+       }else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
             ], 404);
-        }
+       }
     }
 
     /**
@@ -95,18 +113,18 @@ class ProductCategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $productCategory = $this->productCategory->destroy($id);
+        $customer =   $this->customer->destroy($id);
 
-        if ($productCategory) {
+        if($customer) {
             return response()->json([
                 'message' => 'Successfully deleted data',
                 'status' => true
             ], 200);
-        } else {
+       }else {
             return response()->json([
                 'message' => 'No data found',
                 'status' => false
             ], 404);
-        }
+       }
     }
 }

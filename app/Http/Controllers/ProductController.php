@@ -16,6 +16,14 @@ class ProductController extends Controller
     public function __construct(ProductService $product){
         $this->product = $product;
     }
+
+    /**
+     * @OA\PathItem(
+     *  title= "My first API",
+     *  version = "0.1"
+     * )
+     *
+     * **/
     public function index()
     {
 
