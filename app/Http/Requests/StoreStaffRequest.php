@@ -29,7 +29,7 @@ class StoreStaffRequest extends FormRequest
             "dateOfBirth"=> "required",
             "mobileNo"=> "required",
             "address" => "nullable",
-            "gender"=> "required|in:Male,Female, Other",
+            "gender"=> "required",
             "position" => "required",
             "shop_id"=> ''
 

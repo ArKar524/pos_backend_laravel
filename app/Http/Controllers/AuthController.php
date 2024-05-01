@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator as confirm;
 
 class AuthController extends Controller
 {
+    
     use HttpResponses;
 
     // login Function
@@ -20,6 +21,34 @@ class AuthController extends Controller
     //  email ->
     //  password ->
     // }
+
+     /**
+
+* @OA\Info(title="Swagger with Laravel",version="1.0.0",)
+
+* @OA\SecurityScheme( type="http", securityScheme="bearerAuth", scheme="bearer", bearerFormat="JWT" )
+
+*/
+
+    /**
+     * 
+
+* @OA\Post(
+* path="/api/login",
+* summary="Authenticate user and generate JWT token",
+*  tags={"Auth"},
+
+* @OA\Parameter( name="email", in="query", description="User’s email", required=true, @OA\Schema(type="string")),
+
+* @OA\Parameter( name="password", in="query", description="User’s password", required=true, @OA\Schema(type="string") ),
+
+* @OA\Response(response="200", description="Login successful", @OA\JsonContent()),
+
+* @OA\Response(response="401", description="Invalid credentials", @OA\JsonContent())
+
+* )
+
+*/
     public function login(Request $request)
     {
         $validator =
@@ -69,6 +98,34 @@ class AuthController extends Controller
     // password ->
     // password_confirmation ->
     // }
+
+ /**
+
+* @OA\Post(
+
+* path="/api/register",
+
+* summary="Register a new user",
+*  tags={"Auth"},
+
+
+
+* @OA\Parameter( name="name", in="query", description="User’s name", required=true, @OA\Schema(type="string") ),
+
+* @OA\Parameter(name="email",in="query",description="User’s email",required=true,@OA\Schema(type="string")),
+* @OA\Parameter( name="phone", in="query", description="User’s phone", required=true, @OA\Schema(type="string") ),
+* @OA\Parameter( name="address", in="query", description="User’s address", required=true, @OA\Schema(type="string") ),
+* @OA\Parameter(name="password",in="query",description="User’s password",required=true,@OA\Schema(type="string")),
+* @OA\Parameter(name="password_confirmation", in="query", description="confirm password", required=true, @OA\Schema(type="string")),
+
+* @OA\Response(response="201", description="User registered successfully", @OA\JsonContent()),
+
+* @OA\Response(response="422", description="Validation errors", @OA\JsonContent())
+
+* )
+
+*/
+     
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -15,9 +15,17 @@ class ShopController extends Controller
     {
         $this->shop = $shop;
     }
-    /**
-     * Display a listing of the resource.
-     */
+
+   /**
+* @OA\Get( 
+*   path="/api/v1/shop",
+*    summary="Get logged-in staff details",
+*   operationId="getShop",
+*     tags={"Shop"},
+*   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
+* security={{"bearerAuth":{}}}
+* )
+*/
     public function index()
     {
         $shops = ShopResource::collection(Shop::get());
@@ -25,9 +33,21 @@ class ShopController extends Controller
         return $this->success($shops, "success", 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+     /**
+
+ * @OA\Post(
+ *     path="/api/v1/shop",
+ *     summary="Post all shop",
+ *     operationId="postShop",
+ *     tags={"Shop"},
+ *      @OA\Parameter( name="shop_name", in="query", description="shop Name",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="mobile_no", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="address", in="query", description="address",required=true, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function store(ShopRequest $request)
     {
       
@@ -40,9 +60,22 @@ class ShopController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+            /**
+     * @OA\Get(
+     *     path="/api/v1/shop/{id}",
+     *     summary="Show shop",
+     *     operationId="showShop",
+     *     tags={"Shop"},
+     *     @OA\Parameter( name="id", in="path", description="ID of the Shop", required=true,
+     *       @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+    *    security={{"bearerAuth":{}}}
+    * )
+    */
     public function show(string $id)
     {
         $shop = new ShopResource($this->shop->getDataById($id));
@@ -56,9 +89,27 @@ class ShopController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+        /**
+
+ * @OA\Put(
+ *     path="/api/v1/shop/{id}",
+ *     summary="update all shop",
+ *     operationId="updateShop",
+ *     tags={"Shop"},
+ *     @OA\Parameter( name="id", in="path", description="Enter Id you want to update", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Parameter( name="shop_name", in="query", description="shop Name",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="mobile_no", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="address", in="query", description="address",required=false, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function update(ShopRequest $request, string $id)
     {
 
@@ -74,9 +125,24 @@ class ShopController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   /**
+
+ * @OA\Delete(
+ *     path="/api/v1/shop/{id}",
+ *     summary="delete shop",
+ *     operationId="deleteShop",
+ *     tags={"Shop"},
+  *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+
+ *     security={{"bearerAuth":{}}}
+ * )
+ */   
     public function destroy(string $id)
     {
         $shop = $this->shop->destroy($id);

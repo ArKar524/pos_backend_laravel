@@ -20,8 +20,15 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     */
+    * @OA\Get( 
+    *   path="/api/v1/customer",
+    *    summary="Get customer details",
+    *   operationId="getCustomer",
+    *     tags={"Customer"},
+    *   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
+    * security={{"bearerAuth":{}}}
+    * )
+    */
     public function index()
     {
         $customers = CustomerResource::collection(Customer::get());
@@ -36,9 +43,23 @@ class CustomerController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+     /**
+
+ * @OA\Post(
+ *     path="/api/v1/customer",
+ *     summary="Post all customer",
+ *     operationId="postCustomer",
+ *     tags={"Customer"},
+ *      @OA\Parameter( name="customerName", in="query", description="customer Name",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=true, @OA\Schema(type="string", format="date")),
+ *      @OA\Parameter( name="mobileNo", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="stateCode", in="query", description="address",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="townshipCode", in="query", description="gender",required=false, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function store(CustomerRequest $request)
     {
         
@@ -58,9 +79,22 @@ class CustomerController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+        /**
+     * @OA\Get(
+     *     path="/api/v1/customer/{id}",
+     *     summary="Show customer",
+     *     operationId="showCustomer",
+     *     tags={"Customer"},
+     *     @OA\Parameter( name="id", in="path", description="ID of the customer member", required=true,
+     *       @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+    *    security={{"bearerAuth":{}}}
+    * )
+    */
     public function show(string $id)
     {
         $customer = $this->customer->getDataById($id);
@@ -76,17 +110,29 @@ class CustomerController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+           /**
 
-    /**
-     * Update the specified resource in storage.
-     */
+ * @OA\Put(
+ *     path="/api/v1/customer/{id}",
+ *     summary="update all customer",
+ *     operationId="updateCustomer",
+ *     tags={"Customer"},
+ *     @OA\Parameter( name="id", in="path", description="Enter Id you want to update", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Parameter( name="customerName", in="query", description="customer Name",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=false, @OA\Schema(type="string", format="date")),
+ *      @OA\Parameter( name="mobileNo", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="stateCode", in="query", description="address",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="townshipCode", in="query", description="gender",required=false, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function update(Request $request, string $id)
     {
         $customer =  $this->customer->update($request->validated(), $id);
@@ -100,10 +146,24 @@ class CustomerController extends Controller
   
        }
     }
+/**
 
-    /**
-     * Remove the specified resource from storage.
-     */
+ * @OA\Delete(
+ *     path="/api/v1/customer/{id}",
+ *     summary="delete customer",
+ *     operationId="deleteCustomer",
+ *     tags={"Customer"},
+  *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+
+ *     security={{"bearerAuth":{}}}
+ * )
+ */   
     public function destroy(string $id)
     {
         $customer =   $this->customer->destroy($id);
