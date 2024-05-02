@@ -6,9 +6,12 @@ use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
 use App\Models\Shop;
 use App\Services\ShopService;
+use App\Traits\HttpResponses;
+use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
+     use HttpResponses;
     protected $shop;
 
     function __construct(ShopService $shop)
@@ -97,10 +100,7 @@ class ShopController extends Controller
  *     operationId="updateShop",
  *     tags={"Shop"},
  *     @OA\Parameter( name="id", in="path", description="Enter Id you want to update", required=true,
- *       @OA\Schema(
- *             type="integer",
- *             format="int64"
- *         )
+
  *     ),
  *      @OA\Parameter( name="shop_name", in="query", description="shop Name",required=false, @OA\Schema(type="string")),
  *      @OA\Parameter( name="mobile_no", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
@@ -110,7 +110,7 @@ class ShopController extends Controller
  *     security={{"bearerAuth":{}}}
  * )
  */
-    public function update(ShopRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
 
         $shop = $this->shop->update($request->all(), $id);

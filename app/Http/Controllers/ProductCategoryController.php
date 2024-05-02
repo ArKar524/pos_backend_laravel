@@ -18,6 +18,16 @@ class ProductCategoryController extends Controller
         $this->productCategory = $productCategory;
     }
 
+      /**
+    * @OA\Get( 
+    *   path="/api/v1/product-categories",
+    *    summary="Get customer details",
+    *   operationId="getProductCategories",
+    *     tags={"ProductCategory"},
+    *   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
+    * security={{"bearerAuth":{}}}
+    * )
+    */
 
     public function index()
     {
@@ -32,8 +42,7 @@ class ProductCategoryController extends Controller
  *     summary="Post all product-categories",
  *     operationId="postProductCategory",
  *     tags={"ProductCategory"},
- *      @OA\Parameter( name="ProductCategoryCode", in="query", description="ProductCategory Name",required=true, @OA\Schema(type="string")),
- *      @OA\Parameter( name="ProductCategoryName", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="ProductCategoryName", in="query", description="Product Category Name",required=true, @OA\Schema(type="string")),
  *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
  *     security={{"bearerAuth":{}}}
  * )
@@ -53,11 +62,11 @@ class ProductCategoryController extends Controller
 
      /**
  * @OA\Get(
- *     path="/api/v1/product-categories/{id}",
+ *     path="/api/v1/product-categories/{ProductCategoryId}",
  *     summary="Show product-categories",
  *     operationId="showProductCategories",
  *     tags={"ProductCategory"},
- *     @OA\Parameter( name="id", in="path", description="ID of the productCategory member", required=true,
+ *     @OA\Parameter( name="ProductCategoryId", in="path", description="ID of the productCategory", required=true,
  *       @OA\Schema(
  *             type="integer",
  *             format="int64"
@@ -87,7 +96,7 @@ class ProductCategoryController extends Controller
        /**
 
  * @OA\Put(
- *     path="/api/v1/product-categories/{id}",
+ *     path="/api/v1/product-categories/{ProductCategoryId}",
  *     summary="update all product-categories",
  *     operationId="updateProductCategory",
  *     tags={"ProductCategory"},
@@ -97,8 +106,8 @@ class ProductCategoryController extends Controller
  *             format="int64"
  *         )
  *     ),
- *      @OA\Parameter( name="ProductCategoryCode", in="query", description="ProductCategory Name",required=false, @OA\Schema(type="string")),
- *      @OA\Parameter( name="ProductCategoryName", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="ProductCategoryCode", in="query", description="ProductCategory Code",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="ProductCategoryName", in="query", description="ProductCategory Name",required=false, @OA\Schema(type="string")),
 
  *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
  *     security={{"bearerAuth":{}}}
@@ -124,11 +133,11 @@ class ProductCategoryController extends Controller
         /**
 
     * @OA\Delete(
-    *     path="/api/v1/product-categories/{id}",
+    *     path="/api/v1/product-categories/{ProductCategoryId}",
     *     summary="delete product-categories",
     *     operationId="deleteProductCategory",
     *     tags={"ProductCategory"},
-    *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+    *     @OA\Parameter( name="ProductCategoryId", in="path", description="Enter Id you want to delete", required=true,
     *       @OA\Schema(
     *             type="integer",
     *             format="int64"

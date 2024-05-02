@@ -24,16 +24,20 @@ class SaleInvoiceController extends Controller
        
     }
 
-        /**
-    * @OA\Get( 
-    *   path="/api/v1/sale-invoices",
-    *    summary="Get Sale invoices",
-    *   operationId="getSaleInvoices",
-    *     tags={"SaleInvoice"},
-    *   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
-    * security={{"bearerAuth":{}}}
-    * )
-    */
+    /**
+ * @OA\Get( 
+ *     path="/api/v1/sale-invoices",
+ *     summary="Get Sale invoices",
+ *     operationId="getSaleInvoices",
+ *     tags={"SaleInvoice"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Success",
+ *         @OA\JsonContent()
+ *     ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
 
     public function index()
     {
@@ -46,24 +50,36 @@ class SaleInvoiceController extends Controller
     }
 
    
-     /**
-
+   /**
  * @OA\Post(
  *     path="/api/v1/sale-invoices",
- *     summary="Post all sale-invoices",
+ *     summary="Post all sale invoices",
  *     operationId="postSaleInvoice",
  *     tags={"SaleInvoice"},
- *      @OA\Parameter( name="total_amount", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
- *      @OA\Parameter( name="discount", in="query", description="address",required=false, @OA\Schema(type="string")),
- *      @OA\Parameter( name="tax", in="query", description="gender",required=false, @OA\Schema(type="string")),
- *      @OA\Parameter( name="payment_type", in="query", description="position",required=true, @OA\Schema(type="string")),
- *      @OA\Parameter( name="payment_amount", in="query", description="shop id",required=true, @OA\Schema(type="number")),
- *      @OA\Parameter( name="receive_amount", in="query", description="shop id",required=true, @OA\Schema(type="number")),
- *      @OA\Parameter( name="change", in="query", description="shop id",required=false, @OA\Schema(type="number")),
- *      @OA\Parameter( name="staff_id", in="query", description="shop id",required=true, @OA\Schema(type="number")),
- *      @OA\Parameter( name="customer_id", in="query", description="shop id",required=true, @OA\Schema(type="number")),
-
- *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *            
+ *             @OA\Property(property="total_amount", type="string", example="100.00"),
+ *             @OA\Property(property="discount", type="number", format="float", example="5"),
+ *             @OA\Property(property="tax", type="number", format="float", example="10"),
+ *             @OA\Property(property="payment_type", type="string", example="cash"),
+ *             @OA\Property(property="payment_amount", type="number", format="float", example=100.00),
+ *             @OA\Property(property="receive_amount", type="number", format="float", example=100.00),
+ *             @OA\Property(property="change", type="number", format="float", example=0.00),
+ *             @OA\Property(property="items", type="array", @OA\Items(
+ *                 type="object",
+ *                 required={"item_id", "quantity", "price", "amount"},
+ *                 @OA\Property(property="product_code", type="integer", example=1),
+ *                 @OA\Property(property="quantity", type="integer", example=5),
+ *                 @OA\Property(property="price", type="number", format="float", example=10.99),
+ *                  @OA\Property(property="amount", type="number", format="float", example=10.99),
+ *             )),
+ *             @OA\Property(property="staff_id", type="integer", example=1),
+ *             @OA\Property(property="customer_id", type="integer", example=1),
+ *         ),
+ *     ),
+ *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent()),
  *     security={{"bearerAuth":{}}}
  * )
  */
@@ -155,8 +171,8 @@ class SaleInvoiceController extends Controller
      *     tags={"SaleInvoice"},
      *     @OA\Parameter( name="voucher_no", in="path", description="voucher no", required=true,
      *       @OA\Schema(
-     *             type="integer",
-     *             format="int64"
+     *             type="string",
+     *             
      *         )
      *     ),
      *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
