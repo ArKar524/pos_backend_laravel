@@ -96,7 +96,7 @@ class ProductController extends Controller
 
         if($product){
 
-                return $this->success($resProduct, 'success', 200);
+            return $this->success($resProduct, 'success', 200);
         }else{
             return $this->error($resProduct, 'No data found', 404);
 

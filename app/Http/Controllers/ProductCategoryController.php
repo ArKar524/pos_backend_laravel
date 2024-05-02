@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductCategoryRequest;
-use App\Http\Resources\ProductCategoryResource;
+use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
 use App\Models\ProductCategory;
 use App\Services\ProductCategoryService;
-use Illuminate\Http\Request;
+use App\Http\Resources\ProductCategoryResource;
+use App\Http\Requests\StoreProductCategoryRequest;
 
 class ProductCategoryController extends Controller
 {
+    use HttpResponses;
     protected $productCategory;
 
 
@@ -27,11 +29,11 @@ class ProductCategoryController extends Controller
      * **/
     public function index()
     {
-        $product = Product::with('ProductCategory')->get();
+        $productCategory = ProductCategory::get();
 
-        $productList = ProductResource::collection($product);
+        $categoryList = ProductCategoryResource::collection($productCategory);
 
-        return $this->success($productList, 'success', 200);
+        return $this->success($categoryList, 'success', 200);
     }
 
      /**
@@ -49,14 +51,18 @@ class ProductCategoryController extends Controller
  */
     public function store(StoreProductCategoryRequest $request)
     {
+        $productCategoryCode = 'PC'.mt_rand(3000, 999999);
 
-        $productCategory = $this->productCategory->insert($request->all());
+        $data['ProductCategoryCode'] = $productCategoryCode;
+        $data['ProductCategoryName'] = $request->ProductCategoryName;
 
+        // return $data;
+
+        $productCategory = $this->productCategory->insert($data);
+        $productCategory['ProductCategoryId'] = $productCategory->id;
+        $resProductCategory = ProductCategoryResource::make($productCategory);
         if ($productCategory) {
-            return response()->json([
-                'data' => $productCategory,
-                'status' => true
-            ], 200);
+            return $this->success($resProductCategory,'success','200');
         }
     }
 
@@ -147,7 +153,7 @@ class ProductCategoryController extends Controller
 
     *     security={{"bearerAuth":{}}}
     * )
-    */   
+    */
     public function destroy(string $id)
     {
         $productCategory = $this->productCategory->destroy($id);
