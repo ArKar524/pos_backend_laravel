@@ -15,64 +15,101 @@ class ShopController extends Controller
     {
         $this->shop = $shop;
     }
-    /**
-     * @OA\PathItem(
-     *  title= "My first API",
-     *  version = "0.1"
-     * )
-     *
-     * **/
-    /**
-     * Display a listing of the resource.
-     */
+
+   /**
+* @OA\Get(
+*   path="/api/v1/shop",
+*    summary="Get logged-in staff details",
+*   operationId="getShop",
+*     tags={"Shop"},
+*   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
+* security={{"bearerAuth":{}}}
+* )
+*/
     public function index()
     {
         $shops = ShopResource::collection(Shop::get());
-        return $shops;
+
+        return $this->success($shops, "success", 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+     /**
+
+ * @OA\Post(
+ *     path="/api/v1/shop",
+ *     summary="Post all shop",
+ *     operationId="postShop",
+ *     tags={"Shop"},
+ *      @OA\Parameter( name="shop_name", in="query", description="shop Name",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="mobile_no", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="address", in="query", description="address",required=true, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function store(ShopRequest $request)
     {
-        // return $request->all();
+
         $data = $request->validated();
         $data['shop_code'] = Shop::generateShopCode();
-        // return $data;
         $shop = $this->shop->insert($data);
 
         if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
+            return $this->success(ShopResource::make($shop), "success", 200);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+            /**
+     * @OA\Get(
+     *     path="/api/v1/shop/{id}",
+     *     summary="Show shop",
+     *     operationId="showShop",
+     *     tags={"Shop"},
+     *     @OA\Parameter( name="id", in="path", description="ID of the Shop", required=true,
+     *       @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+    *    security={{"bearerAuth":{}}}
+    * )
+    */
     public function show(string $id)
     {
         $shop = new ShopResource($this->shop->getDataById($id));
         // dd($shop);
         if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
+            return $this->success(ShopResource::make($shop), "success", 200);
+
         } else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+            return $this->error($shop, 'No data found', 404);
+
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+        /**
+
+ * @OA\Put(
+ *     path="/api/v1/shop/{id}",
+ *     summary="update all shop",
+ *     operationId="updateShop",
+ *     tags={"Shop"},
+ *     @OA\Parameter( name="id", in="path", description="Enter Id you want to update", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Parameter( name="shop_name", in="query", description="shop Name",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="mobile_no", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="address", in="query", description="address",required=false, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function update(ShopRequest $request, string $id)
     {
 
@@ -80,34 +117,40 @@ class ShopController extends Controller
         // return $shop;
 
         if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
+            return $this->success(ShopResource::make($shop), "success", 200);
+
         } else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+            return $this->error($shop, 'No data found', 404);
+
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   /**
+
+ * @OA\Delete(
+ *     path="/api/v1/shop/{id}",
+ *     summary="delete shop",
+ *     operationId="deleteShop",
+ *     tags={"Shop"},
+  *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function destroy(string $id)
     {
         $shop = $this->shop->destroy($id);
-        if ($shop) {
-            return response()->json([
-                'data' => $shop,
-                'status' => true
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
-        }
+        if($shop) {
+            return $this->success(null, 'deleted', 200);
+       }else {
+        return $this->error(null, "No data found",404 );
+
+       }
     }
 }

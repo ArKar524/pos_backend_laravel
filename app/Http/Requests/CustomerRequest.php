@@ -27,7 +27,10 @@ class CustomerRequest extends FormRequest
         return [
             'customerCode' => '',
             'customerName' => 'required:string',
-            'mobileNo' => 'required:init'            
+            'mobileNo' => 'required:init',
+            'dateOfBirth' => 'nullable' ,
+            'stateCode' => '' ,
+            'townshipCode'=> ''
         ];
     }
     public function failedValidation(Validator $validator)

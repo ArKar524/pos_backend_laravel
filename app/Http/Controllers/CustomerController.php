@@ -2,35 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerRequest;
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
-
+use App\Services\CustomerService;
+use App\Traits\HttpResponses;
 
 class CustomerController extends Controller
 {
+    use HttpResponses;
     protected $customer;
 
     function __construct(CustomerService $customer)
     {
         $this->customer = $customer;
     }
-    /**
-     * @OA\PathItem(
-     *  title= "My first API",
-     *  version = "0.1"
-     * )
-     *
-     * **/
-
 
     /**
-     * Display a listing of the resource.
-     */
+    * @OA\Get(
+    *   path="/api/v1/customer",
+    *    summary="Get customer details",
+    *   operationId="getCustomer",
+    *     tags={"Customer"},
+    *   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
+    * security={{"bearerAuth":{}}}
+    * )
+    */
     public function index()
     {
-        $customer = CustomerResource::collection(Customer::get());
-        return $customer;
+        $customers = CustomerResource::collection(Customer::get());
+        return $this->success($customers, "success", 200);
     }
 
     /**
@@ -41,90 +43,137 @@ class CustomerController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+     /**
+
+ * @OA\Post(
+ *     path="/api/v1/customer",
+ *     summary="Post all customer",
+ *     operationId="postCustomer",
+ *     tags={"Customer"},
+ *      @OA\Parameter( name="customerName", in="query", description="customer Name",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=true, @OA\Schema(type="string", format="date")),
+ *      @OA\Parameter( name="mobileNo", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="stateCode", in="query", description="address",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="townshipCode", in="query", description="gender",required=false, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
+    public function store(CustomerRequest $request)
     {
+
         // return $request->all();
-        $data = $request->validated();
+        $validatedData = $request->validated();
 
-        $customer = $this->customer->insert($data);
+        $customerCode =  "Cus_" . mt_rand(3000, 999999);
 
+        $validatedData["customerCode"] = $customerCode;
+
+        $customer = $this->customer->insert($validatedData);
+
+        $resCus = CustomerResource::make($customer);
         if ($customer) {
-            return response()->json([
-                'data' => CustomerResource::make($customer),
-                'message'=>"A customer account is created successfully ",
-                'status' => true
-            ], 200);
+            return $this->success($resCus, "success", 200);
+
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+        /**
+     * @OA\Get(
+     *     path="/api/v1/customer/{id}",
+     *     summary="Show customer",
+     *     operationId="showCustomer",
+     *     tags={"Customer"},
+     *     @OA\Parameter( name="id", in="path", description="ID of the customer member", required=true,
+     *       @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+    *    security={{"bearerAuth":{}}}
+    * )
+    */
     public function show(string $id)
     {
         $customer = $this->customer->getDataById($id);
 
+        $resCus = CustomerResource::make($customer);
+
         if ($customer) {
-            return response()->json([
-                'data' => CustomerResource::make($customer),
-                'status' => true
-            ], 200);
+            return $this->success($resCus, "success", 200);
+
         }else{
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+            return $this->error($resCus, 'No data found', 404);
+
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+           /**
 
-    /**
-     * Update the specified resource in storage.
-     */
+ * @OA\Put(
+ *     path="/api/v1/customer/{id}",
+ *     summary="update all customer",
+ *     operationId="updateCustomer",
+ *     tags={"Customer"},
+ *     @OA\Parameter( name="id", in="path", description="Enter Id you want to update", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Parameter( name="customerName", in="query", description="customer Name",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=false, @OA\Schema(type="string", format="date")),
+ *      @OA\Parameter( name="mobileNo", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="stateCode", in="query", description="address",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="townshipCode", in="query", description="gender",required=false, @OA\Schema(type="string")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function update(Request $request, string $id)
     {
         $customer =  $this->customer->update($request->validated(), $id);
+        $resCus = CustomerResource::make($customer);
 
         if($customer) {
-            return response()->json([
-                'message' => 'Successfully updated data',
-                'status' => true
-            ], 200);
+            return $this->success($resCus, "success", 200);
+
        }else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+        return $this->error($resCus, 'No data found', 404);
+
        }
     }
+/**
 
-    /**
-     * Remove the specified resource from storage.
-     */
+ * @OA\Delete(
+ *     path="/api/v1/customer/{id}",
+ *     summary="delete customer",
+ *     operationId="deleteCustomer",
+ *     tags={"Customer"},
+  *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function destroy(string $id)
     {
         $customer =   $this->customer->destroy($id);
 
         if($customer) {
-            return response()->json([
-                'message' => 'Successfully deleted data',
-                'status' => true
-            ], 200);
+            return $this->success(null, "success", 200);
+
        }else {
-            return response()->json([
-                'message' => 'No data found',
-                'status' => false
-            ], 404);
+        return $this->error(null, 'No data found', 404);
+
        }
     }
 }

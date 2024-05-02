@@ -8,9 +8,11 @@ use App\Services\ProductService;
 use App\Http\Resources\ProductResource;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Traits\HttpResponses;
 
 class ProductController extends Controller
 {
+    use HttpResponses;
     protected $product;
 
     public function __construct(ProductService $product){
@@ -18,115 +20,154 @@ class ProductController extends Controller
     }
 
     /**
-     * @OA\PathItem(
-     *  title= "My first API",
-     *  version = "0.1"
-     * )
-     *
-     * **/
+    * @OA\Get(
+    *   path="/api/v1/product",
+    *    summary="Get logged-in product details",
+    *   operationId="getProduct",
+    *     tags={"Product"},
+    *   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
+    * security={{"bearerAuth":{}}}
+    * )
+    */
     public function index()
     {
+        $productList = ProductResource::collection(Product::with('ProductCategory')->get());
+        // return $productList;
+        return $this->success($productList, 'success', 200);
 
-        $productList = ProductResource::collection(Product::get());
-        return $productList;
-        return response()->json([
-            'message' =>'success',
-            'data' => $productList
-        ],200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+     /**
+
+ * @OA\Post(
+ *     path="/api/v1/product",
+ *     summary="Post all product",
+ *     operationId="postProduct",
+ *     tags={"Product"},
+ *      @OA\Parameter( name="product_name", in="query", description="product Name",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=true, @OA\Schema(type="string", format="date")),
+ *      @OA\Parameter( name="price", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="ProductCategoryId", in="query", description="product category id",required=true, @OA\Schema(type="number")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function store(StoreProductRequest $request)
     {
-
-        $validatedData = $request->validate();
         $productCode = 'P'.mt_rand(3000, 999999);
-        $validatedData['productCode'] = $productCode;
+        $validatedData['product_code'] = $productCode;
+        $validatedData['product_name'] = $request->product_name;
+        $validatedData['ProductCategoryId'] = $request->ProductCategoryId;
+        $validatedData['price'] = $request->price;
+
 
         $product = $this->product->insert($validatedData);
 
+        $resProduct = ProductResource::make($product);
+
         if($product){
-            return[
-                response()->json([
-                    'data' => $product,
-                    'message' => 'success'
-                ],200)
-            ];
+            return $this->success($resProduct, 'success', 200);
+
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+            /**
+     * @OA\Get(
+     *     path="/api/v1/product/{id}",
+     *     summary="Show product",
+     *     operationId="showProduct",
+     *     tags={"Product"},
+     *     @OA\Parameter( name="id", in="path", description="ID of the product", required=true,
+     *       @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *@OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+    *    security={{"bearerAuth":{}}}
+    * )
+    */
     public function show($id)
     {
         $product = $this->product->getProductById($id);
 
+        $resProduct = ProductResource::make($product);
+
         if($product){
 
-            return[
-                response()->json([
-                    'data' => $product,
-                    'message' => 'success'
-                ],200)
-
-            ];
+                return $this->success($resProduct, 'success', 200);
         }else{
-            return [response()->json([
-                'message' => "No product data found",
-                'status' => false
-            ],404)];
+            return $this->error($resProduct, 'No data found', 404);
+
         }
     }
 
 
 
-    /**
-     * Update the specified resource in storage.
-     */
+          /**
+
+ * @OA\Put(
+ *     path="/api/v1/product/{id}",
+ *     summary="update all product",
+ *     operationId="updateProduct",
+ *     tags={"Product"},
+ *     @OA\Parameter( name="id", in="path", description="Enter Id you want to update", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Parameter( name="product_name", in="query", description="product Name",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=false, @OA\Schema(type="string", format="date")),
+ *      @OA\Parameter( name="price", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="ProductCategoryId", in="query", description="product category id",required=false, @OA\Schema(type="number")),
+
+ *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function update(UpdateProductRequest $request,string $id)
     {
         $product = $this->product->update($request->validated(),$id);
+
         if($product){
-            return [
-                response()->json([
-                    'message' => 'Data updated Successfully',
-                    'status' => true
-                ],200)
-            ];
+            $updatedProduct = $this->product->getProductById($id);
+            return $this->success(ProductResource::make($updatedProduct), 'success', 200);
+
         }else{
-            return [
-                response()->json([
-                    'message' => "No data found",
-                    'status' => false
-                ],404)
-            ];
+            return $this->error($resProduct, 'No data found', 404);
+
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   /**
+
+ * @OA\Delete(
+ *     path="/api/v1/product/{id}",
+ *     summary="delete product",
+ *     operationId="deleteProduct",
+ *     tags={"Product"},
+  *     @OA\Parameter( name="id", in="path", description="Enter Id you want to delete", required=true,
+ *       @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *      @OA\Response(  response=200, description="Successful operation",  @OA\JsonContent()  ),
+
+ *     security={{"bearerAuth":{}}}
+ * )
+ */
     public function destroy(int $id)
     {
         $product = $this->product->destroy($id);
 
-        if($product){
-            return [
-                response()->json([
-                    'message' => "Delete successfully",
-                    'status' => true
-                ],200)
-            ];
-        }else{
-            return [
-                response()->json([
-                    'message' => "No data found",
-                    'status' => false
-                ],404)
-            ];
-        }
+        if($product) {
+            return $this->success(null, 'deleted', 200);
+       }else {
+        return $this->error(null, "No data found",404 );
+
+       }
     }
 }

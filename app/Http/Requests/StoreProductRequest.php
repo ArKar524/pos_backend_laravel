@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -25,9 +24,9 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'productCode' => 'required',
-            'productName' => 'required',
-            'price' => 'required|numeric',
+             'product_code' => '',
+            'product_name' => 'required',
+            'price' => 'required',
             'ProductCategoryId' => 'required'
         ];
     }

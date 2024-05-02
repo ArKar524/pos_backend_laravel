@@ -16,4 +16,9 @@ class SaleInvoice extends Model
     {
         return $this->belongsTo(Staff::class, 'staff_id');
     }
+
+    public function customer() : BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 }

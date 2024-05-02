@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\ProductCategoryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -16,10 +17,10 @@ class ProductResource extends JsonResource
     {
         return [
             'ProductId' => $this->id,
-            'ProductCode' => $this->productCode,
-            'ProductName' => $this->productName,
+            'ProductCode' => $this->product_code,
+            'ProductName' => $this->product_name,
             'Price' => $this->price,
-            'ProductCategoryId' => $this->ProductCategoryId
+            'ProductCategory' => ProductCategoryResource::make($this->ProductCategory)
         ];
     }
 }

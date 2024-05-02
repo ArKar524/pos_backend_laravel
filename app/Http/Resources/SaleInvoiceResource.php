@@ -24,7 +24,12 @@ class SaleInvoiceResource extends JsonResource
             'PaymentType'=> $this->payment_type,
             'PaymentAmount'=> $this->payment_amount,
             'ReceiveAmount'=> $this->receive_amount,
-            'Change' => $this->change
+            'Change' => $this->change,
+            'Customer'=> CustomerResource::make($this->customer),
+            'Staff'=> StaffResource::make($this->staff)
+            // 'staff_id'=> $this->staff_id,
+            // 'StaffName'=> $this->staff->staffName
+
         ];
     }
 }
