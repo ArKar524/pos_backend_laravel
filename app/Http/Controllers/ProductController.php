@@ -22,7 +22,7 @@ class ProductController extends Controller
     /**
     * @OA\Get(
     *   path="/api/v1/product",
-    *    summary="Get logged-in product details",
+    *    summary="Get all products",
     *   operationId="getProduct",
     *     tags={"Product"},
     *   @OA\Response(response="200", description="Success",  @OA\JsonContent()),
@@ -45,8 +45,7 @@ class ProductController extends Controller
  *     operationId="postProduct",
  *     tags={"Product"},
  *      @OA\Parameter( name="product_name", in="query", description="product Name",required=true, @OA\Schema(type="string")),
- *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=true, @OA\Schema(type="string", format="date")),
- *      @OA\Parameter( name="price", in="query", description="mobile No",required=true, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="price", in="query", description="price",required=true, @OA\Schema(type="string")),
  *      @OA\Parameter( name="ProductCategoryId", in="query", description="product category id",required=true, @OA\Schema(type="number")),
 
  *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
@@ -119,11 +118,11 @@ class ProductController extends Controller
  *         )
  *     ),
  *      @OA\Parameter( name="product_name", in="query", description="product Name",required=false, @OA\Schema(type="string")),
- *      @OA\Parameter( name="dateOfBirth", in="query", description="date of birth",required=false, @OA\Schema(type="string", format="date")),
- *      @OA\Parameter( name="price", in="query", description="mobile No",required=false, @OA\Schema(type="string")),
+ *      @OA\Parameter( name="price", in="query", description="price",required=false, @OA\Schema(type="string")),
  *      @OA\Parameter( name="ProductCategoryId", in="query", description="product category id",required=false, @OA\Schema(type="number")),
 
  *     @OA\Response(response=200, description="Successful operation",  @OA\JsonContent() ),
+  *     @OA\Response(response=404, description="Not Found",  @OA\JsonContent() ),
  *     security={{"bearerAuth":{}}}
  * )
  */

@@ -380,6 +380,28 @@
             }
         },
         "/api/v1/product-categories": {
+            "get": {
+                "tags": [
+                    "ProductCategory"
+                ],
+                "summary": "Get customer details",
+                "operationId": "getProductCategories",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "ProductCategory"
@@ -388,18 +410,9 @@
                 "operationId": "postProductCategory",
                 "parameters": [
                     {
-                        "name": "ProductCategoryCode",
-                        "in": "query",
-                        "description": "ProductCategory Name",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "ProductCategoryName",
                         "in": "query",
-                        "description": "mobile No",
+                        "description": "Product Category Name",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -423,7 +436,7 @@
                 ]
             }
         },
-        "/api/v1/product-categories/{id}": {
+        "/api/v1/product-categories/{ProductCategoryId}": {
             "get": {
                 "tags": [
                     "ProductCategory"
@@ -432,9 +445,9 @@
                 "operationId": "showProductCategories",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "ProductCategoryId",
                         "in": "path",
-                        "description": "ID of the productCategory member",
+                        "description": "ID of the productCategory",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -478,7 +491,7 @@
                     {
                         "name": "ProductCategoryCode",
                         "in": "query",
-                        "description": "ProductCategory Name",
+                        "description": "ProductCategory Code",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -487,7 +500,7 @@
                     {
                         "name": "ProductCategoryName",
                         "in": "query",
-                        "description": "mobile No",
+                        "description": "ProductCategory Name",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -518,7 +531,7 @@
                 "operationId": "deleteProductCategory",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "ProductCategoryId",
                         "in": "path",
                         "description": "Enter Id you want to delete",
                         "required": true,
@@ -550,7 +563,7 @@
                 "tags": [
                     "Product"
                 ],
-                "summary": "Get logged-in product details",
+                "summary": "Get all products",
                 "operationId": "getProduct",
                 "responses": {
                     "200": {
@@ -585,19 +598,9 @@
                         }
                     },
                     {
-                        "name": "dateOfBirth",
-                        "in": "query",
-                        "description": "date of birth",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "date"
-                        }
-                    },
-                    {
                         "name": "price",
                         "in": "query",
-                        "description": "mobile No",
+                        "description": "price",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -692,19 +695,9 @@
                         }
                     },
                     {
-                        "name": "dateOfBirth",
-                        "in": "query",
-                        "description": "date of birth",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date"
-                        }
-                    },
-                    {
                         "name": "price",
                         "in": "query",
-                        "description": "mobile No",
+                        "description": "price",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -723,6 +716,14 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -798,91 +799,93 @@
                 "tags": [
                     "SaleInvoice"
                 ],
-                "summary": "Post all sale-invoices",
+                "summary": "Post all sale invoices",
                 "operationId": "postSaleInvoice",
-                "parameters": [
-                    {
-                        "name": "total_amount",
-                        "in": "query",
-                        "description": "mobile No",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "discount",
-                        "in": "query",
-                        "description": "address",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "tax",
-                        "in": "query",
-                        "description": "gender",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "payment_type",
-                        "in": "query",
-                        "description": "position",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "payment_amount",
-                        "in": "query",
-                        "description": "shop id",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "name": "receive_amount",
-                        "in": "query",
-                        "description": "shop id",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "name": "change",
-                        "in": "query",
-                        "description": "shop id",
-                        "required": false,
-                        "schema": {
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "name": "staff_id",
-                        "in": "query",
-                        "description": "shop id",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "name": "customer_id",
-                        "in": "query",
-                        "description": "shop id",
-                        "required": true,
-                        "schema": {
-                            "type": "number"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "total_amount": {
+                                        "type": "string",
+                                        "example": "100.00"
+                                    },
+                                    "discount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "5"
+                                    },
+                                    "tax": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "10"
+                                    },
+                                    "payment_type": {
+                                        "type": "string",
+                                        "example": "cash"
+                                    },
+                                    "payment_amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100
+                                    },
+                                    "receive_amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100
+                                    },
+                                    "change": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "item_id",
+                                                "quantity",
+                                                "price",
+                                                "amount"
+                                            ],
+                                            "properties": {
+                                                "product_code": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "quantity": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 10.99
+                                                },
+                                                "amount": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 10.99
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "staff_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "customer_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -984,8 +987,7 @@
                         "description": "voucher no",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "string"
                         }
                     }
                 ],
@@ -1127,11 +1129,7 @@
                         "name": "id",
                         "in": "path",
                         "description": "Enter Id you want to update",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
+                        "required": true
                     },
                     {
                         "name": "shop_name",
