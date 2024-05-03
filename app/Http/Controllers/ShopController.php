@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
+use Illuminate\Http\Request;
+use App\Services\ShopService;
+use App\Traits\HttpResponses;
 use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
-use App\Models\Shop;
-use App\Services\ShopService;
 
 class ShopController extends Controller
 {
+    use HttpResponses;
     protected $shop;
 
     function __construct(ShopService $shop)
@@ -17,7 +20,7 @@ class ShopController extends Controller
     }
 
    /**
-* @OA\Get( 
+* @OA\Get(
 *   path="/api/v1/shop",
 *    summary="Get logged-in staff details",
 *   operationId="getShop",
@@ -29,8 +32,9 @@ class ShopController extends Controller
     public function index()
     {
         $shops = ShopResource::collection(Shop::get());
-        
-        return $this->success($shops, "success", 200);
+        // return $shops;
+
+        return $this->success($shops, 'success', 200);
     }
 
      /**
@@ -50,7 +54,7 @@ class ShopController extends Controller
  */
     public function store(ShopRequest $request)
     {
-      
+
         $data = $request->validated();
         $data['shop_code'] = Shop::generateShopCode();
         $shop = $this->shop->insert($data);
@@ -114,10 +118,10 @@ class ShopController extends Controller
     {
 
         $shop = $this->shop->update($request->all(), $id);
-        // return $shop;
 
         if ($shop) {
-            return $this->success(ShopResource::make($shop), "success", 200);
+            $updatedShop = $this->shop->getDataById($id);
+            return $this->success(ShopResource::make($updatedShop), "success", 200);
 
         } else {
             return $this->error($shop, 'No data found', 404);
@@ -142,14 +146,14 @@ class ShopController extends Controller
 
  *     security={{"bearerAuth":{}}}
  * )
- */   
+ */
     public function destroy(string $id)
     {
         $shop = $this->shop->destroy($id);
         if($shop) {
             return $this->success(null, 'deleted', 200);
        }else {
-        return $this->error(null, "No data found",404 );    
+        return $this->error(null, "No data found",404 );
 
        }
     }

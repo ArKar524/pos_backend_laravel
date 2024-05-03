@@ -20,7 +20,7 @@ class ProductController extends Controller
     }
 
     /**
-    * @OA\Get( 
+    * @OA\Get(
     *   path="/api/v1/product",
     *    summary="Get logged-in product details",
     *   operationId="getProduct",
@@ -61,7 +61,7 @@ class ProductController extends Controller
         $validatedData['ProductCategoryId'] = $request->ProductCategoryId;
         $validatedData['price'] = $request->price;
 
-        
+
         $product = $this->product->insert($validatedData);
 
         $resProduct = ProductResource::make($product);
@@ -95,8 +95,8 @@ class ProductController extends Controller
         $resProduct = ProductResource::make($product);
 
         if($product){
-       
-                return $this->success($resProduct, 'success', 200);
+
+            return $this->success($resProduct, 'success', 200);
         }else{
             return $this->error($resProduct, 'No data found', 404);
 
@@ -130,9 +130,10 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request,string $id)
     {
         $product = $this->product->update($request->validated(),$id);
-        $resProduct = ProductResource::make($product);
+
         if($product){
-            return $this->success($resProduct, 'success', 200);
+            $updatedProduct = $this->product->getProductById($id);
+            return $this->success(ProductResource::make($updatedProduct), 'success', 200);
 
         }else{
             return $this->error($resProduct, 'No data found', 404);
@@ -157,7 +158,7 @@ class ProductController extends Controller
 
  *     security={{"bearerAuth":{}}}
  * )
- */   
+ */
     public function destroy(int $id)
     {
         $product = $this->product->destroy($id);
@@ -165,7 +166,7 @@ class ProductController extends Controller
         if($product) {
             return $this->success(null, 'deleted', 200);
        }else {
-        return $this->error(null, "No data found",404 );    
+        return $this->error(null, "No data found",404 );
 
        }
     }

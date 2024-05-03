@@ -17,8 +17,8 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'productCode' => "P".mt_rand(3000, 999999),
-            'productName' => fake()->name(),
+            'product_code' => "P".mt_rand(3000, 999999),
+            'product_name' => fake()->name(),
             'price' => rand(500,100000),
             'ProductCategoryId' => rand(1,10)
         ];

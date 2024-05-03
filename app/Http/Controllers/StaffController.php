@@ -15,7 +15,7 @@ class StaffController extends Controller
     use HttpResponses;
     protected $staff;
 
-   
+
 
     public function __construct(StaffService $staff)
     {
@@ -23,7 +23,7 @@ class StaffController extends Controller
     }
 
 /**
-* @OA\Get( 
+* @OA\Get(
 *   path="/api/v1/staff",
 *    summary="Get logged-in staff details",
 *   operationId="getStaff",
@@ -41,7 +41,7 @@ class StaffController extends Controller
         $resStaff = StaffResource::collection($staff);
 
         return $this->success($resStaff, 'success', 200);
-        
+
     }
 
   /**
@@ -63,10 +63,10 @@ class StaffController extends Controller
  *     security={{"bearerAuth":{}}}
  * )
  */
-     
+
     public function store(StoreStaffRequest $request)
     {
-       
+
        $validatedData = $request->validated();
 
        $staffCode =  "Stf_" . mt_rand(3000, 999999);
@@ -80,10 +80,10 @@ class StaffController extends Controller
 
         if ($staff) {
             return $this->success($resStaff, "success", 200);
-            
+
         }
     }
-     
+
  /**
  * @OA\Get(
  *     path="/api/v1/staff/{id}",
@@ -110,7 +110,7 @@ class StaffController extends Controller
 
         }else{
             return $this->error($staff, 'No data found', 404);
-           
+
         }
     }
 
@@ -140,21 +140,21 @@ class StaffController extends Controller
  *     security={{"bearerAuth":{}}}
  * )
  */
-  
+
     public function update(UpdateStaffRequest $request, string  $id)
     {
         $staff =  $this->staff->update($request->validated(), $id);
-        
+
 
         if($staff) {
             $updatedStaff = $this->staff->getDataById($id);
             return $this->success(StaffResource::make($updatedStaff), 'Updated', 200);
        }else {
-            return $this->error(null, "No data found",404 );    
+            return $this->error(null, "No data found",404 );
        }
     }
 
- 
+
  /**
 
  * @OA\Delete(
@@ -172,7 +172,7 @@ class StaffController extends Controller
 
  *     security={{"bearerAuth":{}}}
  * )
- */   
+ */
     public function destroy($id)
     {
         $staff =   $this->staff->destroy($id);
@@ -180,8 +180,8 @@ class StaffController extends Controller
         if($staff) {
             return $this->success(null, 'deleted', 200);
        }else {
-        return $this->error(null, "No data found",404 );    
+        return $this->error(null, "No data found",404 );
        }
-    
+
     }
 }

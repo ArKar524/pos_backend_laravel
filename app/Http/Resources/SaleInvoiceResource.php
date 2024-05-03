@@ -29,7 +29,7 @@ class SaleInvoiceResource extends JsonResource
             'Staff'=> StaffResource::make($this->staff)
             // 'staff_id'=> $this->staff_id,
             // 'StaffName'=> $this->staff->staffName
-            
+
         ];
     }
 }

@@ -24,18 +24,18 @@ class UpdateStaffRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
+
                 "staffCode" => "",
                 "staffName" => "string",
                 "dateOfBirth"=> "",
-                "mobileNo"=> "numeric",
+                "mobileNo"=> "required",
                 "address" => "nullable",
                 "gender"=> "in:Male,Female, Other",
                 "position" => ""
-    
+
             ];
     }
-    
+
         public function failedValidation(Validator $validator) {
             throw new HttpResponseException(response()->json([
                 'status' => false,
@@ -43,5 +43,5 @@ class UpdateStaffRequest extends FormRequest
                 'data' => $validator->errors()
             ]));
         }
-    
+
 }

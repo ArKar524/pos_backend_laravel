@@ -21,7 +21,9 @@ class ProductResource extends JsonResource
             'ProductCode' => $this->product_code,
             'ProductName' => $this->product_name,
             'Price' => $this->price,
-            'ProductCategory'=> ProductCategoryResource::make($this->ProductCategory)
+
+            'ProductCategory' => ProductCategoryResource::make($this->ProductCategory)
+
         ];
     }
 }
