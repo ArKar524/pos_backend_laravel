@@ -21,7 +21,7 @@ class SaleInvoiceController extends Controller
     public function __construct(SaleInvoiceService $invoice)
     {
         $this->invoice = $invoice;
-       
+
     }
 
     /**
@@ -39,6 +39,7 @@ class SaleInvoiceController extends Controller
  * )
  */
 
+
     public function index()
     {
         $saleInvoices = SaleInvoice::with("staff","customer")->get();
@@ -46,11 +47,13 @@ class SaleInvoiceController extends Controller
         $resInvoice =SaleInvoiceResource::collection($saleInvoices);
 
         return $this->success($resInvoice, 'success', 200);
-        
+
     }
+
 
    
    /**
+
  * @OA\Post(
  *     path="/api/v1/sale-invoices",
  *     summary="Post all sale invoices",
@@ -85,11 +88,11 @@ class SaleInvoiceController extends Controller
  */
     public function store(StoreSaleInvoiceRequest $request)
     {
-       
+
 
         DB::beginTransaction();
         try {
-           
+
              $validatedData = $request->validated();
             $voucher_no = "V_".mt_rand(3000, 999999);
             $validatedData['sale_invoice_date_time'] = Carbon::now()->toDateTimeString();
@@ -106,22 +109,22 @@ class SaleInvoiceController extends Controller
             $saleInvoice = $this->invoice->insert($validatedData);
 
             $resInvoice = SaleInvoiceResource::make($saleInvoice);
-            
+
             foreach ($request->items as $item) {
-    
-    
+
+
                 $detail = new SaleInvoiceDetail();
-                
+
                 $detail->voucher_no = $saleInvoice->voucher_no;
                 $detail->product_code = $item['product_code'];
                 $detail->quantity = $item['quantity'];
                 $detail->price = $item['price'];
                 $detail->amount = $item['amount'];
-    
+
                 $detail->save();
-    
+
             }
-           
+
             DB::commit();
         } catch (\Throwable $th) {
            DB::rollBack();
@@ -129,7 +132,7 @@ class SaleInvoiceController extends Controller
         }
 
         return $this->success($resInvoice, 'success', 200);
- 
+
     }
 
             /**
@@ -159,7 +162,7 @@ class SaleInvoiceController extends Controller
 
         }else{
             return $this->error($saleInvoice, 'No data found', 404);
-           
+
         }
     }
 
@@ -179,7 +182,7 @@ class SaleInvoiceController extends Controller
     *    security={{"bearerAuth":{}}}
     * )
     */
-  
+
     public function getDataByVoucherNo($voucher_no)
     {
         $saleInvoice = $this->invoice->getDataByVoucherNo($voucher_no);
@@ -190,7 +193,7 @@ class SaleInvoiceController extends Controller
 
         }else{
             return $this->error($saleInvoice, 'No data found', 404);
-           
+
         }
     }
 
@@ -211,7 +214,7 @@ class SaleInvoiceController extends Controller
 
  *     security={{"bearerAuth":{}}}
  * )
- */   
+ */
     public function destroy($id)
     {
         $saleInvoice = $this->invoice->destroy($id);
@@ -219,7 +222,7 @@ class SaleInvoiceController extends Controller
         if($saleInvoice) {
             return $this->success(null, 'deleted', 200);
        }else {
-        return $this->error(null, "No data found",404 );    
+        return $this->error(null, "No data found",404 );
         }
     }
 }

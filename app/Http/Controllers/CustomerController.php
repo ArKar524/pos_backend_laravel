@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CustomerRequest;
-use Illuminate\Http\Request;
-use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
-use App\Services\CustomerService;
+use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
+use App\Services\CustomerService;
+use App\Http\Requests\CustomerRequest;
+use App\Http\Resources\CustomerResource;
+use App\Http\Requests\UpdateCustomerRequest;
 
 class CustomerController extends Controller
 {
@@ -20,7 +21,7 @@ class CustomerController extends Controller
     }
 
     /**
-    * @OA\Get( 
+    * @OA\Get(
     *   path="/api/v1/customer",
     *    summary="Get customer details",
     *   operationId="getCustomer",
@@ -62,20 +63,20 @@ class CustomerController extends Controller
  */
     public function store(CustomerRequest $request)
     {
-        
+
         // return $request->all();
         $validatedData = $request->validated();
 
         $customerCode =  "Cus_" . mt_rand(3000, 999999);
 
         $validatedData["customerCode"] = $customerCode;
-   
+
         $customer = $this->customer->insert($validatedData);
 
         $resCus = CustomerResource::make($customer);
         if ($customer) {
             return $this->success($resCus, "success", 200);
-            
+
         }
     }
 
@@ -133,17 +134,17 @@ class CustomerController extends Controller
  *     security={{"bearerAuth":{}}}
  * )
  */
-    public function update(Request $request, string $id)
+    public function update(UpdateCustomerRequest $request, string $id)
     {
         $customer =  $this->customer->update($request->validated(), $id);
-        $resCus = CustomerResource::make($customer);
 
         if($customer) {
-            return $this->success($resCus, "success", 200);
+            $updatedCus = $this->customer->getDataById($id);
+            return $this->success(CustomerResource::make($updatedCus), "success", 200);
 
        }else {
         return $this->error($resCus, 'No data found', 404);
-  
+
        }
     }
 /**
@@ -163,11 +164,11 @@ class CustomerController extends Controller
 
  *     security={{"bearerAuth":{}}}
  * )
- */   
+ */
     public function destroy(string $id)
     {
         $customer =   $this->customer->destroy($id);
-      
+
         if($customer) {
             return $this->success(null, "success", 200);
 

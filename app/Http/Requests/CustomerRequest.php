@@ -29,8 +29,9 @@ class CustomerRequest extends FormRequest
             'customerName' => 'required:string',
             'mobileNo' => 'required:init',
             'dateOfBirth' => 'nullable' ,
+            'gender' => 'nullable',
             'stateCode' => '' ,
-            'townshipCode'=> ''    
+            'townshipCode'=> ''
         ];
     }
     public function failedValidation(Validator $validator)
