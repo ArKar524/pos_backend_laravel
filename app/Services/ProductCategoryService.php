@@ -26,4 +26,12 @@ class ProductCategoryService extends CommonService
     {
         return $this->connection()->query()->where('ProductCategoryId', $id)->delete();
     }
+
+    public function insert($request) {
+        $productCategoryCode = 'PC'.mt_rand(3000, 999999);
+        $data['ProductCategoryCode'] = $productCategoryCode;
+        $data['ProductCategoryName'] = $request['ProductCategoryName'];
+
+        return $this->connection()->create($data);
+    }
 }

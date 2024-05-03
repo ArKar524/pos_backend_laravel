@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ProductCategoryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+
 class ProductResource extends JsonResource
 {
     /**
@@ -20,7 +21,9 @@ class ProductResource extends JsonResource
             'ProductCode' => $this->product_code,
             'ProductName' => $this->product_name,
             'Price' => $this->price,
+
             'ProductCategory' => ProductCategoryResource::make($this->ProductCategory)
+
         ];
     }
 }
