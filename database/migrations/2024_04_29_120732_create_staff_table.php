@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("address");
             $table->enum('gender',['Male','Female','Other'])->default('Male');
             $table->string('position');
+            $table->unsignedBigInteger('shop_id');
             $table->timestamps();
         });
     }

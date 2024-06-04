@@ -32,7 +32,8 @@ class StaffFactory extends Factory
             "mobileNo" => fake()->phoneNumber(),
             "address" => fake()->address(),
             "gender" => $gender,
-            "position" => $position
+            "position" => $position,
+            "shop_id" => rand(1,10),
             
             
         ];

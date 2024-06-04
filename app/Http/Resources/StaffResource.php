@@ -22,7 +22,8 @@ class StaffResource extends JsonResource
             "MobileNo"=> $this->mobileNo,
             "Address" => $this->address,
             "Gender"=> $this->gender,
-            "Position" => $this->position
+            "Position" => $this->position,
+            "shop" => ShopResource::make($this->shop)
         ];
     }
 }

@@ -27,10 +27,11 @@ class StoreStaffRequest extends FormRequest
             "staffCode" => "",
             "staffName" => "required|string",
             "dateOfBirth"=> "required",
-            "mobileNo"=> "required|numeric",
+            "mobileNo"=> "required",
             "address" => "nullable",
-            "gender"=> "required|in:Male,Female, Other",
-            "position" => "required"
+            "gender"=> "required",
+            "position" => "required",
+            "shop_id"=> ''
 
         ];
     }

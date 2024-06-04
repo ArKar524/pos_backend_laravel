@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('shop_code')->unique();
             $table->string('shop_name');
-            $table->integer('mobile_no');
+            $table->string('mobile_no');
             $table->string('address');
             $table->timestamps();
         });
